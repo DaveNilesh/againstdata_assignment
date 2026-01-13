@@ -1,0 +1,95 @@
+{
+  "name": "Workflow 1: Batch Processing (Integrated)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger-import",
+      "name": "Start Batch Process",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://python_api:8000/api/import-csv",
+        "sendBody": true,
+        "contentType": "json",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "csv_path",
+              "value": "/app/List1.csv"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "import-csv",
+      "name": "Import CSV to DB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        470,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://python_api:8000/api/process-pending",
+        "sendBody": true,
+        "contentType": "json",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "limit",
+              "value": 10
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "process-pending",
+      "name": "Process Pending Data",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        690,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Start Batch Process": {
+      "main": [
+        [
+          {
+            "node": "Import CSV to DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Import CSV to DB": {
+      "main": [
+        [
+          {
+            "node": "Process Pending Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "3"
+}

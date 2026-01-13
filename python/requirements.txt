@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+requests
+beautifulsoup4
+qdrant-client
+psycopg2-binary
+pydantic
+langchain
+langchain-community
+sentence-transformers
+# playwright # Optional for advanced scraping, keeping it simple for now with requests/bs4
+pandas==2.1.4
+langchain-huggingface
